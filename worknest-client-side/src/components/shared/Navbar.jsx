@@ -29,14 +29,14 @@ const Navbar = () => {
       </li>
       <li className="text-foreg text-lg">
         <NavLink
-          to={"/about-us"}
+          to={"/about"}
           className={({ isActive }) =>
             isActive
               ? " border-b-2 border-primary text-lg pb-1 font-bold"
               : "font-normal"
           }
         >
-          About Us
+          About
         </NavLink>
       </li>
 
@@ -91,9 +91,12 @@ const Navbar = () => {
                 {navItems}
               </ul>
             </div>
-            <h1 className="text-xl md:text-3xl font-bold text-primary">
+            <Link
+              to={"/"}
+              className="text-xl md:text-3xl font-bold text-primary"
+            >
               WorkNest
-            </h1>
+            </Link>
           </div>
           <div className="navbar-center hidden lg:flex">
             <ul className="menu menu-horizontal px-1">{navItems}</ul>

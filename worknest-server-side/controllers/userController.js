@@ -34,8 +34,15 @@ const getSingleUser = async (req, res) => {
 // create and post a new user to DB
 const createUser = async (req, res) => {
   try {
-    const { uid, name, email, role, companyName } = req.body;
-    const newUsers = new User({ uid, name, email, role, companyName });
+    const { uid, name, email, role, profileCompleted, companyName } = req.body;
+    const newUsers = new User({
+      uid,
+      name,
+      email,
+      role,
+      profileCompleted,
+      companyName,
+    });
     await newUsers.save();
     res.status(200).json({
       users: newUsers,

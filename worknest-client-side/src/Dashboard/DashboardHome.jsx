@@ -22,6 +22,7 @@ import useUserRole from "../hooks/useUserRole";
 import useNotifications from "../hooks/useNotifications";
 import { AuthContext } from "../contexts/AuthContext";
 import axios from "axios";
+import Loading from "../components/Loading";
 
 const DashboardHome = () => {
   const [userData, setUserData] = useState(null);
@@ -224,14 +225,7 @@ const DashboardHome = () => {
   };
 
   if (loading || !userData) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-foreground">Loading your dashboard...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

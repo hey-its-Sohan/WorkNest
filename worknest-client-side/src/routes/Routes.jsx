@@ -12,6 +12,9 @@ import MeetingRooms from "../Dashboard/Dashboardcomponents/MeetingRooms";
 import Profile from "../Dashboard/Dashboardcomponents/Profile";
 import MyBookings from "../Dashboard/Dashboardcomponents/MyBookings";
 import Analytics from "../Dashboard/Dashboardcomponents/Analytics";
+import RequireProfileCompleted from "../components/RequireProfileCompleted";
+import CompleteProfile from "../components/CompleteProfile";
+import About from "../pages/About";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +28,10 @@ export const router = createBrowserRouter([
         Component: Home,
       },
       {
+        path: "/about",
+        Component: About,
+      },
+      {
         path: "/login",
         Component: Login,
       },
@@ -32,14 +39,23 @@ export const router = createBrowserRouter([
         path: "/signup",
         Component: SignUp,
       },
+      {
+        path: "/complete-profile",
+        Component: CompleteProfile,
+      },
     ],
   },
   {
     path: "/dashboard",
-    Component: DashboardLayout,
+    element: (
+      <RequireProfileCompleted>
+        <DashboardLayout />
+      </RequireProfileCompleted>
+    ),
     children: [
       {
-        path: "/dashboard",
+        index: true,
+
         Component: DashboardHome,
       },
 

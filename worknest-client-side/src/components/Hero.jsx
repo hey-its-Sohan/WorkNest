@@ -1,5 +1,6 @@
 import React from "react";
 import heroImage from "../assets/heroImage.png";
+import { Link } from "react-router";
 
 const Hero = () => {
   return (
@@ -16,7 +17,9 @@ const Hero = () => {
                 your office resources, from desk booking to in-depth analytics.
               </h2>
               <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                <button className="btn-primary">Get Started Free</button>
+                <Link to={"/signup"}>
+                  <button className="btn-primary">Get Started Free</button>
+                </Link>
                 <button className=" cursor-pointer  overflow-hidden rounded-lg h-10 px-5 bg-gray-200 dark:bg-gray-700 text-foreground dark:text-white text-base font-semibold  hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                   Watch Demo
                 </button>
