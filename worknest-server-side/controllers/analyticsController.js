@@ -106,21 +106,12 @@ const getLatestAnalytics = async (req, res) => {
       { name: "Desk", value: totalDesks },
       { name: "Meeting Room", value: totalMeetingRooms },
     ];
-
-    // Simple location grouping for map
-    const locationCount = {};
-    workspaces.forEach((w) => {
-      const building = w.location?.building || "Unknown";
-      const floor = w.location?.floor || "Unknown";
-      const zone = w.location?.zone || "Unknown";
-      const key = `${building}__${floor}__${zone}`;
-      locationCount[key] = (locationCount[key] || 0) + 1;
-    });
-
-    const officeLocation = Object.entries(locationCount).map(([key, count]) => {
-      const [building, floor, zone] = key.split("__");
-      return { building, floor, zone, count };
-    });
+    // Office location for analytics map (BRAC University)
+    const officeLocation = {
+      address: "BRAC University, Dhaka",
+      mapsIframeUrl:
+        "https://www.google.com/maps?q=BRAC%20University,%20Dhaka&output=embed",
+    };
 
     // Summary numbers for top cards
     const totalBooked = deskUsageByDay.reduce((s, d) => s + d.booked, 0);
