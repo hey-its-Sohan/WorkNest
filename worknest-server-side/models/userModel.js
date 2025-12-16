@@ -24,17 +24,17 @@ const userSchema = new mongoose.Schema(
 
     photoURL: {
       type: String,
+      required: true,
+      maxlength: 30,
     },
-
-    // company metadata
-    companyName: { type: String, trim: true },
-    department: { type: String, trim: true },
-
-    // Access level
-    role: { type: String, enum: ["admin", "employee"], default: "employee" },
-
-    // Soft disable without deleting data
-    isActive: { type: Boolean, default: true },
+    profileCompleted: {
+      type: Boolean,
+      default: false,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );
@@ -44,4 +44,4 @@ userSchema.index({ email: 1 }, { unique: true });
 userSchema.index({ uid: 1 }, { unique: true });
 userSchema.index({ role: 1, isActive: 1 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = UserModel;

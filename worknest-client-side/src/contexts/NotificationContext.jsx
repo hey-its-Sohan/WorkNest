@@ -14,8 +14,7 @@ export const useNotification = () => {
   return context;
 };
 
-// Named export for provider
-export const NotificationProvider = ({ children }) => {
+export default ({ children }) => {
   const [notifications, setNotifications] = useState([]);
 
   const fetchNotifications = async () => {

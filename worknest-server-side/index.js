@@ -23,10 +23,7 @@ app.use("/api", workspaceRoutes);
 app.use("/api", notificationRoutes);
 app.use("/api", attendanceRoutes);
 
-// all routes for analytics
-app.use("/dashboard", analyticsRoutes);
-// all routes for notifications
-app.use("/api/notifications", notificationRoutes);
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
