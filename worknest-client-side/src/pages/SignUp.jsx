@@ -5,18 +5,16 @@ import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 
 const SignUp = () => {
-  const { createUser, updateUser } = use(AuthContext);
+  const { createUser, updateUser, googleSignIn } = use(AuthContext);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
-    companyName: "",
-    role: "employee",
+
     agreeToTerms: false,
   });
 
@@ -70,47 +68,66 @@ const SignUp = () => {
         displayName: formData.name,
       });
 
-      //  User data for backend
-      const userData = {
-        uid: user.uid,
-        name: formData.name,
-        email: formData.email,
-        companyName: formData.companyName,
-        role: "employee",
-      };
+      const res = await axios.get(`http://localhost:3000/users/${user.uid}`);
 
-      // Sending user data to backend
-      const response = await axios.post(
-        "http://localhost:3000/users",
-        userData
-      );
+      if (!res.data.users) {
+        // if first time signup, then create user
+        await axios.post("http://localhost:3000/users", {
+          uid: user.uid,
+          email: user.email,
+          name: user.displayName || "",
+          profileCompleted: false,
+        });
 
-      console.log("User created successfully:", response.data);
-
-      // Redirect to dashboard
-      navigate("/");
+        navigate("/complete-profile");
+      } else {
+        // if user already exists
+        if (!res.data.users.profileCompleted) {
+          navigate("/complete-profile");
+        } else {
+          navigate("/dashboard");
+        }
+      }
     } catch (error) {
       console.error("Signup error:", error);
 
-      if (error.response) {
-        // Backend API error
-        setError(
-          error.response.data.message || "Failed to create user account."
-        );
-      } else {
-        setError("An unexpected error occurred. Please try again.");
-      }
+      setError("Signup failed");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await googleSignIn();
+      const user = result.user;
+
+      const res = await axios.get(`http://localhost:3000/users/${user.uid}`);
+
+      if (!res.data.users) {
+        await axios.post("http://localhost:3000/users", {
+          uid: user.uid,
+          email: user.email,
+          name: user.displayName || "",
+          photoURL: user.photoURL,
+          profileCompleted: false,
+        });
+
+        navigate("/complete-profile");
+      } else {
+        res.data.users.profileCompleted
+          ? navigate("/dashboard")
+          : navigate("/complete-profile");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const isFormValid = () => {
     return (
-      formData.name &&
       formData.email &&
       formData.password &&
-      formData.companyName &&
       formData.agreeToTerms &&
       passwordRequirements.every((req) => req.met)
     );
@@ -151,44 +168,6 @@ const SignUp = () => {
                   </p>
 
                   <form onSubmit={handleSubmit}>
-                    {/* Name Field */}
-                    <div className="pb-4">
-                      <label className="flex flex-col">
-                        <p className="text-foreground text-base font-medium pb-2">
-                          Name
-                        </p>
-                        <input
-                          className="rounded-lg text-foreground outline-primary/50 bg-card h-14 placeholder:text-muted-foreground p-[15px] text-base border border-border focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-colors duration-200"
-                          placeholder="Enter your name"
-                          type="text"
-                          value={formData.name}
-                          onChange={(e) =>
-                            handleInputChange("name", e.target.value)
-                          }
-                          required
-                        />
-                      </label>
-                    </div>
-
-                    {/* Company Field */}
-                    <div className="flex w-full flex-wrap items-end gap-4 pb-4">
-                      <label className="flex flex-col min-w-40 flex-1 w-full">
-                        <p className="text-foreground text-base font-medium leading-normal pb-2">
-                          Company Name
-                        </p>
-                        <input
-                          className="rounded-lg text-foreground outline-primary/50 bg-card h-14 placeholder:text-muted-foreground p-[15px] text-base border border-border focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-colors duration-200"
-                          placeholder="Your company name"
-                          type="text"
-                          value={formData.companyName}
-                          onChange={(e) =>
-                            handleInputChange("companyName", e.target.value)
-                          }
-                          required
-                        />
-                      </label>
-                    </div>
-
                     {/* Email Field */}
                     <div className="flex w-full flex-wrap items-end gap-4 pb-4">
                       <label className="flex flex-col min-w-40 flex-1 w-full">
@@ -306,7 +285,7 @@ const SignUp = () => {
                     {/* Sign Up Button */}
                     <button
                       type="submit"
-                      className={`w-full font-semibold py-4 rounded-lg transition-colors duration-200 mt-2 h-14 shadow-lg hover:shadow-xl flex items-center justify-center ${
+                      className={`w-full font-semibold py-4 rounded-lg transition-colors duration-200 mt-2 h-14 shadow-md hover:shadow-xl flex items-center justify-center ${
                         isFormValid() && !loading
                           ? "bg-primary text-primary-foreground hover:bg-primary-hover cursor-pointer"
                           : "bg-muted text-muted-foreground cursor-not-allowed"
@@ -321,6 +300,43 @@ const SignUp = () => {
                       ) : (
                         "Create Account"
                       )}
+                    </button>
+                    <div className="divider text-lg text-foreground/60 my-4">
+                      Or
+                    </div>
+                    <button
+                      onClick={handleGoogleLogin}
+                      className="w-full font-semibold py-4 rounded-lg transition-colors duration-200 mt-2 h-14 shadow-lg hover:shadow-xl flex gap-2 items-center justify-center"
+                    >
+                      <svg
+                        version="1.1"
+                        height={20}
+                        width={20}
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 48 48"
+                        class="LgbsSe-Bz112c"
+                      >
+                        <g>
+                          <path
+                            fill="#EA4335"
+                            d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+                          ></path>
+                          <path
+                            fill="#4285F4"
+                            d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+                          ></path>
+                          <path
+                            fill="#FBBC05"
+                            d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
+                          ></path>
+                          <path
+                            fill="#34A853"
+                            d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+                          ></path>
+                          <path fill="none" d="M0 0h48v48H0z"></path>
+                        </g>
+                      </svg>
+                      Sign Up with Google
                     </button>
                   </form>
 

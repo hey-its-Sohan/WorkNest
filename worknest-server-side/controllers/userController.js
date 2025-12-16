@@ -31,14 +31,47 @@ const getSingleUser = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { uid, name, email, role, companyName } = req.body;
-    const newUsers = new User({ uid, name, email, role, companyName });
-    await newUsers.save();
+    const {
+      uid,
+      name,
+      email,
+      role = "employee",
+      department,
+      companyName,
+      photoURL,
+      profileCompleted = false,
+    } = req.body;
+
+    const user = await User.findOneAndUpdate(
+      { uid }, // search condition
+      {
+        uid,
+        name,
+        email,
+        role,
+        department,
+        companyName,
+        photoURL,
+        profileCompleted,
+      },
+      {
+        new: true,
+        upsert: true, // create if not exists
+        setDefaultsOnInsert: true,
+      }
+    );
+
     res.status(200).json({
-      users: newUsers,
+      success: true,
+      user,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to create or update user",
+    });
   }
 };
 
@@ -67,11 +100,12 @@ const getUserRoleByEmail = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { name, email, role, companyName } = req.body;
-    const updatedUser = await User.findByIdAndUpdate(
-      id,
-      { name, email, role, companyName },
+    const { uid } = req.params;
+    const { name, companyName, department, role, isActive, photoURL } =
+      req.body;
+    const updatedUser = await User.findOneAndUpdate(
+      { uid },
+      { name, companyName, department, role, isActive, photoURL },
       { new: true }
     );
     res.status(200).json({
@@ -85,20 +119,27 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
+
     const deletedUser = await User.findByIdAndDelete(id);
 
     if (!deletedUser) {
-      res.json({
-        message: "User not found, cannot be deleted!!",
+      return res.status(404).json({
+        success: false,
+        message: "User not found, cannot be deleted!",
       });
     }
 
     res.status(200).json({
-      message: "User deleted successfully!!",
-      users: deletedUser,
+      success: true,
+      message: "User deleted successfully!",
+      user: deletedUser,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while deleting user",
+    });
   }
 };
 

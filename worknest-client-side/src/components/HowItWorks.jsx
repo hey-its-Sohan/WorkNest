@@ -1,4 +1,5 @@
 import { Settings, Calendar, BarChart3, ArrowRight } from "lucide-react";
+import { Link } from "react-router";
 
 const HowItWorks = () => {
   const steps = [
@@ -131,13 +132,15 @@ const HowItWorks = () => {
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">
-          <button className="btn btn-primary btn-lg rounded-full px-8 group">
-            <span>Start Your Journey</span>
-            <ArrowRight
-              size={20}
-              className="group-hover:translate-x-1 transition-transform duration-200"
-            />
-          </button>
+          <Link to={"/signup"}>
+            <button className="btn btn-primary btn-lg rounded-full px-8 group">
+              <span>Start Your Journey</span>
+              <ArrowRight
+                size={20}
+                className="group-hover:translate-x-1 transition-transform duration-200"
+              />
+            </button>
+          </Link>
           <p className="text-sm text-muted-foreground mt-4">
             Join 1,000+ companies transforming their workspace
           </p>

@@ -7,12 +7,14 @@ const NotificationContext = createContext();
 export const useNotification = () => {
   const context = useContext(NotificationContext);
   if (!context) {
-    throw new Error('useNotification must be used within a NotificationProvider');
+    throw new Error(
+      "useNotification must be used within a NotificationProvider"
+    );
   }
   return context;
 };
 
-// ✅ Named export for provider
+// Named export for provider
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
 
@@ -21,7 +23,7 @@ export const NotificationProvider = ({ children }) => {
       const response = await axios.get('http://localhost:3000/api/notifications');
       setNotifications(response.data);
     } catch (error) {
-      console.error('Error fetching notifications:', error);
+      console.error("Error fetching notifications:", error);
     }
   };
 
@@ -31,7 +33,7 @@ export const NotificationProvider = ({ children }) => {
       setNotifications(prev => [...prev, response.data]);
       return response.data;
     } catch (error) {
-      console.error('Error creating notification:', error);
+      console.error("Error creating notification:", error);
       throw error;
     }
   };
@@ -45,7 +47,7 @@ export const NotificationProvider = ({ children }) => {
         )
       );
     } catch (error) {
-      console.error('Error marking notification as read:', error);
+      console.error("Error marking notification as read:", error);
     }
   };
 
@@ -54,7 +56,7 @@ export const NotificationProvider = ({ children }) => {
       await axios.delete(`http://localhost:3000/api/notifications/${id}`);
       setNotifications(prev => prev.filter(notification => notification._id !== id));
     } catch (error) {
-      console.error('Error deleting notification:', error);
+      console.error("Error deleting notification:", error);
     }
   };
 
