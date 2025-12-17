@@ -1,41 +1,35 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const attendanceSchema = new mongoose.Schema(
+const AttendanceSchema = new Schema(
   {
-    // Employee this record belongs to
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    employeeId: {
+      type: String,
       required: true,
     },
-
-    // Date stored as YYYY-MM-DD to avoid timezone issues
-    day: { type: String, required: true },
-
-    // Work mode for the day
-    mode: { type: String, enum: ["office", "remote"], required: true },
-
-    // Actual check-in and check-out times
-    checkInAt: { type: Date },
-    checkOutAt: { type: Date },
-
-    // Cached total time worked (in minutes)
-    totalMinutes: { type: Number, default: 0, min: 0 },
+    employeeName: {
+      type: String,
+      required: true,
+    },
+    checkInTime: {
+      type: Date,
+      required: true,
+    },
+    checkOutTime: {
+      type: Date,
+      default: null,
+    },
+    date: {
+      type: Date,
+      required: true,
+    },
+    totalHours: {
+      type: Number,
+      default: 0,
+    },
   },
-  { timestamps: true }
+  { versionKey: false }
 );
 
-// One attendance record per user per day
-attendanceSchema.index({ userId: 1, day: 1 }, { unique: true });
-attendanceSchema.index({ day: 1, mode: 1 });
+const AttendanceModel = model("attendance", AttendanceSchema);
 
-// Automatically calculate totalMinutes when both times exist
-attendanceSchema.pre("save", function (next) {
-  if (this.checkInAt && this.checkOutAt && this.checkOutAt > this.checkInAt) {
-    const diff = this.checkOutAt.getTime() - this.checkInAt.getTime();
-    this.totalMinutes = Math.floor(diff / 60000);
-  }
-  next();
-});
-
-module.exports = mongoose.model("Attendance", attendanceSchema);
+module.exports = AttendanceModel;
