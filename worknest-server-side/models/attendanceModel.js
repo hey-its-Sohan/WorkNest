@@ -5,7 +5,6 @@ const AttendanceSchema = new Schema(
     employeeId: {
       type: String,
       required: true,
-      // Don't use index: true here - define it separately below
     },
     employeeName: {
       type: String,
@@ -22,7 +21,6 @@ const AttendanceSchema = new Schema(
     date: {
       type: Date,
       required: true,
-      // Don't use index: true here - define it separately below
     },
     totalHours: {
       type: Number,
@@ -32,7 +30,6 @@ const AttendanceSchema = new Schema(
   { versionKey: false }
 );
 
-// Define compound unique index ONCE
 AttendanceSchema.index(
   { employeeId: 1, date: 1 },
   { unique: true }

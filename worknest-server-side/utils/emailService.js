@@ -63,10 +63,10 @@ const verifyEmailConfig = async () => {
   try {
     const transporter = createTransporter();
     await transporter.verify();
-    console.log('✅ Email service is ready');
+    console.log('Email service is ready');
     return true;
   } catch (error) {
-    console.error('❌ Email service verification failed:', error.message);
+    console.error('Email service verification failed:', error.message);
     return false;
   }
 };
@@ -94,7 +94,7 @@ const sendEmail = async (to, subject, text, html = null, options = {}) => {
       }
 
       const info = await transporter.sendMail(mailOptions);
-      console.log(`✅ Email sent successfully to ${to} (Attempt ${attempt}/${maxRetries})`);
+      console.log(`Email sent successfully to ${to} (Attempt ${attempt}/${maxRetries})`);
       console.log('Message ID:', info.messageId);
       
       return {
@@ -191,8 +191,7 @@ const emailTemplates = {
   }),
 };
 
-// Helper function to send templated emails
-// Now accepts an object with template data
+
 const sendTemplatedEmail = async (to, templateName, templateData = {}) => {
   const template = emailTemplates[templateName];
   if (!template) {

@@ -224,7 +224,7 @@ const getTotalHours = async (req, res) => {
       return sum + (record.totalHours || 0);
     }, 0);
 
-    console.log(`✅ Total hours: ${totalHours.toFixed(2)} from ${attendanceRecords.length} records`);
+    console.log(`Total hours: ${totalHours.toFixed(2)} from ${attendanceRecords.length} records`);
 
     return res.status(200).json({
       success: true,

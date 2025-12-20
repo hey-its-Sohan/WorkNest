@@ -104,9 +104,9 @@ const createUser = async (req, res) => {
           }
         );
         
-        console.log(`✅ Welcome email sent to ${user.email}`);
+        console.log(`Welcome email sent to ${user.email}`);
       } catch (emailError) {
-        console.error("❌ Error sending welcome email:", emailError.message);
+        console.error("Error sending welcome email:", emailError.message);
         // Note: We don't fail the user creation if email sending fails
         // The user is still created successfully
       }
