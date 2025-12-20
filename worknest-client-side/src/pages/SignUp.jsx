@@ -68,11 +68,11 @@ const SignUp = () => {
         displayName: formData.name,
       });
 
-      const res = await axios.get(`http://localhost:3000/users/${user.uid}`);
+      const res = await axios.get(`http://localhost:3000/api/users/${user.uid}`);
 
       if (!res.data.user) {
         // if first time signup, then create user
-        await axios.post("http://localhost:3000/users", {
+        await axios.post("http://localhost:3000/api/users", {
           uid: user.uid,
           email: user.email,
           name: user.displayName || "",
@@ -102,7 +102,7 @@ const SignUp = () => {
       const result = await googleSignIn();
       const user = result.user;
 
-      const res = await axios.get(`http://localhost:3000/users/${user.uid}`);
+      const res = await axios.get(`http://localhost:3000/api/users/${user.uid}`);
 
       if (!res.data.user) {
         await axios.post("http://localhost:3000/users", {

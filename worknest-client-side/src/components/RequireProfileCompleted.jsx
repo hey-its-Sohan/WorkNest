@@ -15,6 +15,8 @@ const RequireProfileCompleted = ({ children }) => {
     axios
       .get(`http://localhost:3000/users/${user.uid}`)
       .then((res) => setProfile(res.data.user));
+      .get(`http://localhost:3000/api/users/${user.uid}`)
+      .then((res) => setProfile(res.data.users));
   }, [user]);
 
   if (!profile) return <Loading />;
