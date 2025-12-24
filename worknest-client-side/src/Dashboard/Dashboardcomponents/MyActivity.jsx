@@ -1013,6 +1013,8 @@ const MyActivity = () => {
       console.log("🔄 Fetching attendance data for user:", user.uid);
       const response = await axios.get(`http://localhost:3000/api/attendance/${user.uid}`);
       const data = response.data.attendance || [];
+      console.log("📊 Received attendance data:", data);
+      
       setAttendanceData(data);
 
       const today = new Date();
