@@ -235,7 +235,6 @@ const checkOut = async (req, res) => {
     const day = new Date();
     day.setUTCHours(0, 0, 0, 0);
 
-    // Find today's check-in record using correct field names
     const attendance = await Attendance.findOne({
       employeeId: employeeId,
       date: day,
