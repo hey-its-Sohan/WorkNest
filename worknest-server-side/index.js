@@ -2,10 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const jsonServer = require("json-server");
 const connectDB = require("./config/db");
+<<<<<<< HEAD
 const http = require("http");
 const { Server } = require("socket.io");
 const socketHandler = require("./socket/socket");
 
+=======
+>>>>>>> f7782b38bedf3693ff050e7f2017583de336f85f
 const PORT = process.env.PORT || 3000;
 const userRoutes = require("./routes/userRoutes");
 const workspaceRoutes = require("./routes/workspaceRoutes");
@@ -15,6 +18,7 @@ const attendanceRoutes = require("./routes/attendanceRoutes");
 const activeRoutes = require("./routes/activeRoutes");
 
 // Debug: Check which routes are undefined
+<<<<<<< HEAD
 console.log(" Debug - Route Types:");
 console.log("userRoutes:", typeof userRoutes);
 console.log("workspaceRoutes:", typeof workspaceRoutes);
@@ -24,10 +28,19 @@ console.log("attendanceRoutes:", typeof attendanceRoutes);
 console.log("activeRoutes:", typeof activeRoutes);
 const taskRoutes = require("./routes/taskRoutes");
 const chatRoutes = require("./routes/chatRoutes");
+=======
+console.log('🔍 Debug - Route Types:');
+console.log('userRoutes:', typeof userRoutes);
+console.log('workspaceRoutes:', typeof workspaceRoutes);
+console.log('analyticsRoutes:', typeof analyticsRoutes);
+console.log('notificationRoutes:', typeof notificationRoutes);
+console.log('attendanceRoutes:', typeof attendanceRoutes);
+console.log('activeRoutes:', typeof activeRoutes);
+>>>>>>> f7782b38bedf3693ff050e7f2017583de336f85f
 
 const app = express();
-const server = http.createServer(app);
 
+<<<<<<< HEAD
 // Socket.IO
 const io = new Server(server, {
   cors: {
@@ -39,10 +52,13 @@ const io = new Server(server, {
 // socket logic
 socketHandler(io);
 
+=======
+>>>>>>> f7782b38bedf3693ff050e7f2017583de336f85f
 // Connect to MongoDB
 connectDB();
 
 // Middleware - CORS with proper configuration
+<<<<<<< HEAD
 app.use(
   cors({
     origin: ["http://localhost:5173", "http://localhost:3000", "*"],
@@ -51,6 +67,14 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+=======
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:3000', '*'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+>>>>>>> f7782b38bedf3693ff050e7f2017583de336f85f
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -75,6 +99,7 @@ app.get("/health", (req, res) => {
 // These handle attendance with MongoDB
 app.use("/api", attendanceRoutes);
 app.use("/api/notifications", notificationRoutes);
+<<<<<<< HEAD
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -124,6 +149,8 @@ app.use((err, req, res, next) => {
     message: err.message || "Internal server error",
   });
 });
+=======
+>>>>>>> f7782b38bedf3693ff050e7f2017583de336f85f
 
 // JSON SERVER ROUTES (For Users Data)
 // This serves your db.json file for user management
@@ -134,7 +161,17 @@ const jsonMiddlewares = jsonServer.defaults();
 app.use(jsonMiddlewares);
 app.use(jsonRouter);
 
+<<<<<<< HEAD
 // server run
 server.listen(PORT, () => {
   console.log(`Server + Socket.IO running on port ${PORT}`);
 });
+=======
+app.listen(PORT, () => {
+  console.log(`\n✅ Unified Server running on port ${PORT}`);
+  console.log(`✅ MongoDB Backend: /api/attendance/*`);
+  console.log(`✅ JSON Server: /users, /bookings, etc.`);
+  console.log(`✅ CORS enabled for http://localhost:5173`);
+  console.log(`✅ Check health: http://localhost:${PORT}/health\n`);
+});
+>>>>>>> f7782b38bedf3693ff050e7f2017583de336f85f
