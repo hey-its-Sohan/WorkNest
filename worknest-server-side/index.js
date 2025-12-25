@@ -39,8 +39,6 @@ const io = new Server(server, {
 // socket logic
 socketHandler(io);
 
-// DB
-
 // Connect to MongoDB
 connectDB();
 
@@ -73,7 +71,7 @@ app.get("/health", (req, res) => {
   res.json({ success: true, message: "Server is running" });
 });
 
-// ===== MONGODB ROUTES (Custom Backend) =====
+// MONGODB ROUTES (Custom Backend)
 // These handle attendance with MongoDB
 app.use("/api", attendanceRoutes);
 app.use("/api/notifications", notificationRoutes);
@@ -110,7 +108,7 @@ app.use("/dashboard", taskRoutes);
 
 // 404 handler
 app.use((req, res) => {
-  console.log(`❌ 404 - Route not found: ${req.method} ${req.path}`);
+  console.log(` 404 - Route not found: ${req.method} ${req.path}`);
   res.status(404).json({
     success: false,
     message: `Route not found: ${req.method} ${req.path}`,
@@ -127,7 +125,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ===== JSON SERVER ROUTES (For Users Data) =====
+// JSON SERVER ROUTES (For Users Data)
 // This serves your db.json file for user management
 const jsonRouter = jsonServer.router("db.json");
 const jsonMiddlewares = jsonServer.defaults();
