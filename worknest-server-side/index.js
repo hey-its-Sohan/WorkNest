@@ -2,10 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const jsonServer = require("json-server");
 const connectDB = require("./config/db");
+<<<<<<< HEAD
 const http = require("http");
 const { Server } = require("socket.io");
 const socketHandler = require("./socket/socket");
 
+=======
+>>>>>>> 86cef7a (Removes merge conflict markers and resolves code inconsistencies)
 const PORT = process.env.PORT || 3000;
 const userRoutes = require("./routes/userRoutes");
 const workspaceRoutes = require("./routes/workspaceRoutes");
@@ -43,6 +46,7 @@ socketHandler(io);
 connectDB();
 
 // Middleware - CORS with proper configuration
+<<<<<<< HEAD
 app.use(
   cors({
     origin: ["http://localhost:5173", "http://localhost:3000", "*"],
@@ -51,6 +55,14 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+=======
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:3000', '*'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+>>>>>>> 86cef7a (Removes merge conflict markers and resolves code inconsistencies)
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -99,6 +111,7 @@ app.get("/health", (req, res) => {
 // These handle attendance with MongoDB
 app.use("/api", attendanceRoutes);
 app.use("/api/notifications", notificationRoutes);
+<<<<<<< HEAD
 
 // ===== OTHER CUSTOM ROUTES =====
 app.use(userRoutes);
@@ -129,6 +142,8 @@ app.use((err, req, res, next) => {
     message: err.message || "Internal server error",
   });
 });
+=======
+>>>>>>> 86cef7a (Removes merge conflict markers and resolves code inconsistencies)
 
 // JSON SERVER ROUTES (For Users Data)
 // This serves your db.json file for user management
@@ -139,7 +154,16 @@ const jsonMiddlewares = jsonServer.defaults();
 app.use(jsonMiddlewares);
 app.use(jsonRouter);
 
+<<<<<<< HEAD
 // server run
 server.listen(PORT, () => {
   console.log(`Server + Socket.IO running on port ${PORT}`);
+=======
+app.listen(PORT, () => {
+  console.log(`\n✅ Unified Server running on port ${PORT}`);
+  console.log(`✅ MongoDB Backend: /api/attendance/*`);
+  console.log(`✅ JSON Server: /users, /bookings, etc.`);
+  console.log(`✅ CORS enabled for http://localhost:5173`);
+  console.log(`✅ Check health: http://localhost:${PORT}/health\n`);
+>>>>>>> 86cef7a (Removes merge conflict markers and resolves code inconsistencies)
 });
